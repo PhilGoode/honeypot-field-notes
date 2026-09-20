@@ -34,3 +34,6 @@ python3 h0neytr4p_recent_requests.py \
 ```
 
 Copying raw samples is outside the scope of these tools.
+
+See [sanitized example output](../docs/reporting-examples.md) to understand the
+reports without supplying private sensor data.
