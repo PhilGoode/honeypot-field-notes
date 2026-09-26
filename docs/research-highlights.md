@@ -8,8 +8,10 @@ the aggregate counts and definitions, see [Measurement Snapshot](metrics.md).
 An exposed SMB emulator received repeated deliveries of closely related Windows
 payloads. Repeated transfers and recurring source behavior showed why event
 counts, unique sources, and unique stored objects should be reported as
-separate measurements. Three reviewed result sets contained 75 distinct
-SHA-256 values, most associated publicly with WannaCry-family activity.
+separate measurements. Four reviewed result sets contained 118 distinct
+SHA-256 values, most associated publicly with WannaCry-family activity. In the
+newest 43-hash set, two hashes had no VirusTotal record at lookup time; manual
+submission later identified one as another WannaCry-family variant.
 
 ## SSH and Telnet payload diversity
 
@@ -19,6 +21,12 @@ commodity campaigns attempting to infect routers, embedded systems, and cloud
 hosts from one deployment chain. This public summary does not include the
 captured files. One delivery set alone covered ARM, AArch64, x86, x86-64, and
 RISC-V.
+
+The collection now combines a contained VPS deployment with a dedicated T-Pot
+host on a separate sensor network. Cowrie and selected malware-capture traffic
+use narrowly scoped, fail-closed VPN egress rather than a whole-host tunnel.
+Captured files persist on separately mounted `noexec` storage, while
+administration remains private.
 
 ## HTTP exploitation traffic
 
@@ -39,5 +47,11 @@ controlled validation tests and were excluded from attacker findings.
   event.
 - Source-plus-event deduplication reduces alert fatigue without hiding repeated
   activity from a new source.
+- Low-value protocol connection alerts are more useful as hourly summaries
+  grouped by protocol and source; completed-file captures still justify
+  immediate metadata-only notification.
+- Research tooling should not share a sensor's identity or route. SpiderFoot
+  enrichment therefore uses a separate VPN path and remains constrained to
+  passive intelligence and explicitly authorized targets.
 - Public findings are most useful when they explain methodology and limitations
   rather than presenting unsanitized telemetry dumps.

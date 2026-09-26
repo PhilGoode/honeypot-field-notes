@@ -30,13 +30,25 @@ count of unique attackers.
 
 | Collection stream | Review batches | Distinct SHA-256 values |
 |---|---:|---:|
-| Dionaea SMB | 3 | 75 |
-| Cowrie SSH/Telnet transfers | 3 | 14 |
-| **Total across both streams** | **6** | **89** |
+| Dionaea service captures | 4 | 118 |
+| Cowrie SSH/Telnet transfers | 4 | 17 |
+| **Total across both streams** | **8** | **135** |
 
 The hash count represents distinct file content in the reviewed result tables.
-It does not mean 89 distinct malware families. Dionaea in particular received
+It does not mean 135 distinct malware families. Dionaea in particular received
 many same-sized WannaCry-family variants with different hashes.
+
+## Latest Dionaea review
+
+The newest 43-hash Dionaea batch contained 41 hashes that already had public
+VirusTotal records. All 41 were Windows DLLs with 49–68 malicious detections in
+the saved lookup snapshot; 40 received a Wanna/WannaCry-family suggestion. Two
+hashes were not indexed at lookup time and were submitted manually. One later
+received 60 malicious detections out of 71 engines and a WannaCry-family label;
+the other submission's later score was not recorded in the public dataset.
+
+These are hash-review results, not proof that every delivery represented a
+different campaign or operator.
 
 ## Cowrie architecture diversity
 

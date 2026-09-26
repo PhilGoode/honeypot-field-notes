@@ -21,8 +21,9 @@ the reviewed datasets, not lifetime totals.
 |---|---:|
 | HTTP and HTTPS request events | **27,935** |
 | Web requests matching configured traps | **845** |
-| Unique Dionaea SMB capture hashes reviewed | **75** |
-| Unique Cowrie transfer hashes reviewed | **14** |
+| Unique Dionaea capture hashes reviewed | **118** |
+| Unique Cowrie transfer hashes reviewed | **17** |
+| Unique hashes across both streams | **135** |
 | CPU architectures in one Cowrie payload set | **5** |
 
 The most important lesson was not simply that exposed services receive traffic.
@@ -40,6 +41,17 @@ with different cryptographic hashes.
   record at lookup time and became this project's first submission of that
   exact hash. Subsequent sandbox results associated it with known
   WannaCry/MS17-010 behavior—not a zero-day.
+- **The collection expanded without weakening isolation:** a dedicated T-Pot
+  host now complements the VPS sensors. Capture storage is separately mounted,
+  selected honeypot egress is fail-closed through a VPN, and the management
+  plane remains private.
+- **More protocols, quieter alerts:** contained EPMAP/NetBIOS, SMTP, SOCKS5,
+  and SNMP emulators broaden the observation surface. Routine connection
+  activity is summarized, while completed-file alerts remain immediate.
+- **Reconnaissance is separated from collection:** SpiderFoot runs on its own
+  VPN-routed path so enrichment activity does not share honeypot egress. Its
+  use remains limited to passive research and systems the operator is
+  authorized to assess.
 - **One deployment chain, five architectures:** Cowrie received ARM, AArch64,
   x86, x86-64, and RISC-V executables alongside shell scripts.
 - **Web exploitation is highly automated:** probes targeted environment files,
@@ -53,19 +65,24 @@ with different cryptographic hashes.
 
 ```mermaid
 flowchart LR
-    Internet((Internet)) --> Edge[Provider or edge firewall]
-    Edge --> Net[Isolated honeypot network]
+    Internet((Internet)) --> Edge[Provider or edge firewalls]
+    Edge --> Net[Isolated collection planes]
     Net --> Cowrie[Cowrie<br/>SSH and Telnet]
-    Net --> Dionaea[Dionaea<br/>SMB emulation]
+    Net --> Dionaea[Dionaea<br/>SMB and service emulation]
     Net --> Web[H0neytr4p<br/>HTTP and HTTPS]
+    Net --> Aux[Auxiliary protocol emulators]
 
     Cowrie --> Logs[(Append-only logs)]
     Dionaea --> Logs
     Web --> Logs
+    Aux --> Logs
     Logs --> Reports[Read-only reporting tools]
     Reports --> Review{Human review}
     Review --> Findings[Sanitized findings]
     Review --> External[Manual reputation,<br/>sandbox, or abuse reporting]
+
+    SpiderFoot[SpiderFoot enrichment] --> ReconVPN[Separate VPN egress]
+    ReconVPN --> PublicData[Public data and<br/>authorized targets]
 
     Net -. default-deny egress .-> Blocked[Blocked outbound traffic]
 ```

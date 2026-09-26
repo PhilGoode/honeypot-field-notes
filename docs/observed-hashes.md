@@ -25,6 +25,7 @@ hash-only VirusTotal lookups; no samples are stored in this repository.
 | [`3f3bf218089d1488617d37f8a5116bb2791eb39ce06a1b5bc9a4cdfe5e94dd39`](https://www.virustotal.com/gui/file/3f3bf218089d1488617d37f8a5116bb2791eb39ce06a1b5bc9a4cdfe5e94dd39) | RISC-V ELF | Multiverze |
 | [`f0aa83bbbd2c75e2f71ec16029ee5fcfad59f3a8efa30a500b815f0f6c18d987`](https://www.virustotal.com/gui/file/f0aa83bbbd2c75e2f71ec16029ee5fcfad59f3a8efa30a500b815f0f6c18d987) | x86-64 ELF | MalXMR |
 | [`1e70b63472772e3f5092ffe9c3573470e73590e6ab6d93fdcede1d368a5fd72d`](https://www.virustotal.com/gui/file/1e70b63472772e3f5092ffe9c3573470e73590e6ab6d93fdcede1d368a5fd72d) | Shell script | SAgent |
+| [`39be6853a8204ce6455a373a6ffb4cb4672d4a62d90be69f7d6eeb66cda10b96`](https://www.virustotal.com/gui/file/39be6853a8204ce6455a373a6ffb4cb4672d4a62d90be69f7d6eeb66cda10b96) | Shell script | Downloader/Mirai-associated |
 
 ## Dionaea SMB captures
 
@@ -32,6 +33,7 @@ hash-only VirusTotal lookups; no samples are stored in this repository.
 |---|---|---|
 | [`815eccf206bc39d67ad9c903c823cc76c59ebb5e0e24ff1028b5242c53686a3a`](https://www.virustotal.com/gui/file/815eccf206bc39d67ad9c903c823cc76c59ebb5e0e24ff1028b5242c53686a3a) | Windows PE DLL | Midie/ZombieBoy |
 | [`365bd32183bea8c84c6d047e5cc037e100b4a1a724ffc3c7f78a67806f030f59`](https://www.virustotal.com/gui/file/365bd32183bea8c84c6d047e5cc037e100b4a1a724ffc3c7f78a67806f030f59) | Windows PE DLL | WannaCry/WannaCrypt behavior; first submitted to VirusTotal by this project |
+| [`9ecb2737eb6da437763add372ad735986543507c603dd88628c9805b394ac51f`](https://www.virustotal.com/gui/file/9ecb2737eb6da437763add372ad735986543507c603dd88628c9805b394ac51f) | Windows PE DLL | WannaCry-family; first submitted to VirusTotal by this project |
 
 ## Use and handling
 

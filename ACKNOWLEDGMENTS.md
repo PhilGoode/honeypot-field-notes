@@ -21,6 +21,14 @@ make these tools available to the security community.
   [T-Pot H0neytr4p package](https://github.com/telekom-security/tpotce/pkgs/container/h0neytr4p),
   provides the HTTP and HTTPS honeypot data summarized by the corresponding
   reporting helper.
+- [Heralding](https://github.com/telekom-security/heralding) provides the
+  credential-capture protocol emulation used for contained SMTP and SOCKS5
+  observations.
+- [Conpot](https://github.com/mushorg/conpot) provides the industrial-control
+  system emulation used for contained SNMP observations.
+- [SpiderFoot](https://github.com/smicallef/spiderfoot) provides the OSINT and
+  infrastructure-enrichment framework discussed in the separated
+  reconnaissance design.
 
 Project names and trademarks belong to their respective owners. Inclusion here
 does not imply affiliation, sponsorship, or endorsement. Users should consult

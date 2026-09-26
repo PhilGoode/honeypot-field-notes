@@ -6,30 +6,41 @@ network.
 
 ```mermaid
 flowchart TB
-    Internet((Internet)) --> Firewall[Provider or edge firewall]
-    Firewall --> VLAN[Isolated sensor network]
+    Internet((Internet)) --> HomeEdge[Home edge firewall]
+    Internet --> VPSEdge[VPS provider firewall]
 
-    subgraph Sensors[Disposable capture services]
-        Cowrie[Cowrie<br/>SSH and Telnet]
-        Dionaea[Dionaea<br/>SMB and service emulation]
-        H0neytr4p[H0neytr4p<br/>HTTP and HTTPS]
+    subgraph Home[Dedicated T-Pot collection plane]
+        HomeEdge --> SensorNet[Isolated sensor network]
+        SensorNet --> TPCowrie[Cowrie]
+        SensorNet --> TPDionaea[Dionaea]
+        SensorNet --> TPOther[Additional T-Pot sensors]
+        TPCowrie --> CaptureDisk[(Separate noexec capture storage)]
+        TPDionaea --> CaptureDisk
+        TPCowrie --> SensorVPN[Scoped fail-closed VPN egress]
+        TPDionaea --> SensorVPN
+        SpiderFoot[SpiderFoot enrichment] --> ReconVPN[Independent VPN egress]
     end
 
-    VLAN --> Cowrie
-    VLAN --> Dionaea
-    VLAN --> H0neytr4p
+    subgraph VPS[Contained VPS collection plane]
+        VPSEdge --> VPSNet[Private container network]
+        VPSNet --> VPSCowrie[Cowrie]
+        VPSNet --> VPSDionaea[Dionaea<br/>SMB, EPMAP, NetBIOS]
+        VPSNet --> VPSWeb[H0neytr4p<br/>HTTP and HTTPS]
+        VPSNet --> Aux[SMTP, SOCKS5, SNMP emulators]
+        VPSNet -. deny new outbound .-> Blocked[VPS egress blocked]
+    end
 
-    Cowrie --> Storage[(Append-only logs<br/>bounded capture storage)]
-    Dionaea --> Storage
-    H0neytr4p --> Storage
+    CaptureDisk --> Reporting[Read-only reporting]
+    VPSCowrie --> Reporting
+    VPSDionaea --> Reporting
+    VPSWeb --> Reporting
+    Aux --> Reporting
 
-    Admin[Separate authenticated<br/>management path] --> Reporting[Read-only reporting]
-    Storage --> Reporting
+    Admin[Separate authenticated management path] --> Reporting
     Reporting --> Review{Human review}
     Review --> Publish[Sanitized publication]
-    Review --> Services[Manual external services]
-
-    VLAN -. blocked by default .-> Egress[New outbound connections]
+    Review --> Services[Manual reputation, sandbox,<br/>and abuse reporting]
+    Review --> Evidence[(Offline evidence archive)]
 ```
 
 ## Design principles
@@ -40,6 +51,8 @@ flowchart TB
 4. Persist logs and captures outside ephemeral container layers.
 5. Send metadata in notifications, never payload attachments.
 6. Summarize events using timestamps, protocol metadata, and source data.
+7. Give reconnaissance tooling its own route and identity instead of sharing
+   honeypot egress.
 
 ## Trust boundaries
 
@@ -53,6 +66,24 @@ payload but can freely contact arbitrary internet hosts can become useful to an
 attacker. Egress controls are tested from the same container or network
 namespace that handles hostile traffic.
 
+The dedicated T-Pot host uses a narrower variation of that rule: only selected
+capture networks receive fail-closed VPN egress, while management and unrelated
+services do not inherit the route. SpiderFoot uses a different VPN-routed path
+altogether. Network separation is a containment property, not permission to
+scan third-party systems; active assessment remains limited to owned or
+explicitly authorized targets.
+
+## Notifications and alert volume
+
+Completed file captures produce immediate metadata-only alerts after the file
+is stable and independently hashed. High-volume EPMAP, NetBIOS, SMTP, SOCKS5,
+and SNMP connection events are grouped by protocol and source into periodic
+summaries. This preserves visibility without turning routine internet noise
+into one notification per packet or connection.
+
+No notification contains raw malware, captured credentials, payload bodies, or
+private topology.
+
 ## Data path
 
 1. The sensor records an interaction in its native log format.
@@ -61,6 +92,9 @@ namespace that handles hostile traffic.
 4. A read-only tool produces a defanged summary.
 5. A human excludes validation traffic and decides whether any external lookup,
    sandbox submission, abuse report, or public finding is justified.
+6. Selected evidence moves directly to a removable archive and is verified by
+   SHA-256; archive placement is tracked separately from external submission or
+   analysis state.
 
 This layout is intentionally generic. It does not disclose a live deployment's
 addresses, credentials, notification channels, or provider configuration.

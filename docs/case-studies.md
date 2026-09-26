@@ -73,6 +73,25 @@ concentrated among a few sources. This looked like broad vulnerability scanning,
 not a human operator carefully studying one application. It also illustrates
 why “requests received” and “attackers observed” are different metrics.
 
+## 5. Forty-three more SMB hashes reinforce the variant problem
+
+A later Dionaea review added 43 distinct SHA-256 values. Forty-one already had
+VirusTotal records and were Windows DLLs with 49–68 malicious detections in the
+saved lookup snapshot. Forty of those records carried a Wanna/WannaCry-family
+suggestion. The remaining two hashes were absent from VirusTotal at lookup time
+and were submitted manually.
+
+One of the newly indexed hashes later received 60 malicious detections out of
+71 engines and a WannaCry-family label. The other became a first VirusTotal
+record for that exact hash, but its later score was not retained in the public
+review data. Neither result supports a zero-day claim: both files matched the
+same 5,267,459-byte PE DLL profile repeatedly observed in established
+WannaCry-family propagation traffic.
+
+The practical lesson is that cryptographic uniqueness and behavioral novelty
+are different measurements. A campaign can continuously generate new hashes
+without introducing a new malware family or exploitation technique.
+
 ## Cross-cutting lessons
 
 1. Preserve exact hashes and timestamps, but do not overstate what they prove.

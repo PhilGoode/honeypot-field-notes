@@ -29,6 +29,17 @@
 - Keep service credentials, local storage paths, submitted files, and raw
   reports outside this public repository.
 
+## Reconnaissance and enrichment
+
+- Keep SpiderFoot and similar enrichment tools on a route separate from sensor
+  traffic and management access.
+- Use passive public-data modules for third-party infrastructure unless the
+  operator has explicit authorization for active testing.
+- Restrict port scanning, service interrogation, crawling, and other active
+  modules to systems the operator owns or is authorized to assess.
+- A VPN changes the apparent source of traffic; it does not grant permission,
+  remove provider-policy obligations, or make an intrusive scan harmless.
+
 ## Publication
 
 - Publish aggregate findings or deliberately reviewed indicators only.
