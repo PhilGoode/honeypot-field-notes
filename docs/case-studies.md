@@ -99,3 +99,18 @@ without introducing a new malware family or exploitation technique.
 3. Treat vendor family labels as evolving enrichment, not ground truth.
 4. Exclude validation traffic before drawing conclusions.
 5. Keep public findings reproducible without publishing the raw evidence.
+
+## 6. The first T-Pot live-malware batch was interesting, not unprecedented
+
+After the dedicated capture disk and fail-closed routing controls were
+accepted, T-Pot retained its first selected live-malware batch. Hash-only
+reputation checks associated the files with known Medusa downloader, Mirai,
+and Multiverze families. Several binaries targeted different embedded Linux
+architectures, and shell downloaders supplied the deployment logic.
+
+This was operationally important because it proved the complete collection
+path: hostile interaction, retained content, stable hashing, direct archive
+transfer, and lookup without automatic sample upload. It was not evidence of a
+new family or zero-day. That distinction mirrors the earlier SMB lesson:
+novelty to one collection is a useful milestone, but public novelty requires
+independent evidence.

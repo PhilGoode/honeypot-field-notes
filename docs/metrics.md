@@ -1,8 +1,29 @@
 # Measurement Snapshot
 
-These measurements summarize reviewed September 2026 datasets. They are
-point-in-time research snapshots, not lifetime counters and not estimates of
-the number of human attackers.
+These measurements summarize reviewed September and October 2026 datasets.
+They are point-in-time research snapshots, not lifetime counters and not
+estimates of the number of human attackers.
+
+## Unified metadata censuses
+
+The collection workflow now produces one verified, metadata-only census for
+each collection plane instead of querying every sensor independently. Raw
+payloads, request bodies, credentials, tokens, and private keys are excluded.
+
+| Collection plane | Window | Activity rows/groups | Public source IPs | Review candidates | Stored files inventoried | Defanged URLs |
+|---|---:|---:|---:|---:|---:|---:|
+| Contained VPS | 48 hours | 6,850 | 1,901 | 1,899 | 23 | 366 |
+| Dedicated T-Pot | 72 hours | 719,155 | 2,671 | 1,445 | 208 | 35 |
+
+The two row counts are not directly interchangeable: the VPS census groups
+source activity, while the T-Pot export retains per-event rows across a much
+broader sensor set. Review-candidate counts are screening results, not automatic
+abuse reports.
+
+The T-Pot inventory also demonstrates why file count and malware count must be
+separated. Of 208 Cowrie filesystem entries, 198 were empty artifacts. The ten
+non-empty files had ten unique non-empty hashes, all already represented in
+the local hash-lookup results.
 
 ## Web sensors
 
@@ -75,6 +96,10 @@ not evidence that the source knew the honeypot's real hardware.
 - Different hashes are not automatically different malware families.
 - Operator tests, internal addresses, and loopback traffic are excluded from
   public conclusions.
+- A **stored file** is a filesystem object, including an empty artifact unless
+  the table explicitly says non-empty.
+- A **capture event** is counted independently of content uniqueness; repeated
+  delivery of one hash remains repeated activity.
 
 The source data remains private because it contains live addresses, internal
 paths, and unsanitized attacker activity. Only reviewed aggregates are

@@ -29,6 +29,15 @@ make these tools available to the security community.
 - [SpiderFoot](https://github.com/smicallef/spiderfoot) provides the OSINT and
   infrastructure-enrichment framework discussed in the separated
   reconnaissance design.
+- [CitrixHoneypot](https://github.com/MalwareTech/CitrixHoneypot), also
+  packaged for T-Pot, provides the contained NetScaler/CVE-2019-19781-focused
+  decoy discussed in the expanded VPS sensor set.
+- [ADBHoney](https://github.com/huuck/ADBHoney) provides the Android Debug
+  Bridge honeypot used for contained TCP/5555 observations.
+- [Log4Pot](https://github.com/thomaspatzke/Log4Pot) provides the Log4Shell
+  honeypot used for lookup-string analysis and guarded payload retrieval.
+- [Elastic](https://www.elastic.co/) provides the private search and dashboard
+  components used to visualize normalized event metadata.
 
 Project names and trademarks belong to their respective owners. Inclusion here
 does not imply affiliation, sponsorship, or endorsement. Users should consult

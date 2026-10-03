@@ -26,7 +26,12 @@ flowchart TB
         VPSNet --> VPSCowrie[Cowrie]
         VPSNet --> VPSDionaea[Dionaea<br/>SMB, EPMAP, NetBIOS]
         VPSNet --> VPSWeb[H0neytr4p<br/>HTTP and HTTPS]
+        VPSNet --> Citrix[NetScaler/Citrix decoy]
+        VPSNet --> ADB[Android Debug Bridge honeypot]
+        VPSNet --> Log4Shell[Log4Shell-focused collector]
         VPSNet --> Aux[SMTP, SOCKS5, SNMP emulators]
+        ADB --> RetrievalVPN[Allow-listed VPN retrieval path]
+        Log4Shell --> RetrievalVPN
         VPSNet -. deny new outbound .-> Blocked[VPS egress blocked]
     end
 
@@ -34,6 +39,9 @@ flowchart TB
     VPSCowrie --> Reporting
     VPSDionaea --> Reporting
     VPSWeb --> Reporting
+    Citrix --> Reporting
+    ADB --> Reporting
+    Log4Shell --> Reporting
     Aux --> Reporting
 
     Admin[Separate authenticated management path] --> Reporting
@@ -53,6 +61,9 @@ flowchart TB
 6. Summarize events using timestamps, protocol metadata, and source data.
 7. Give reconnaissance tooling its own route and identity instead of sharing
    honeypot egress.
+8. Put capture-capable services on bounded `noexec` filesystems and permit
+   retrieval only through narrow, fail-closed routes.
+9. Build dashboards from normalized metadata, never from raw payload content.
 
 ## Trust boundaries
 
@@ -73,6 +84,12 @@ altogether. Network separation is a containment property, not permission to
 scan third-party systems; active assessment remains limited to owned or
 explicitly authorized targets.
 
+Two specialized VPS collectors need limited HTTP/S retrieval because their
+purpose includes observing attacker-supplied download locations. They use
+dedicated container networks, private/reserved-destination denial, allow-listed
+ports, and VPN-only egress. If that VPN path is absent, retrieval fails closed.
+The host itself and the remaining honeypots do not inherit that route.
+
 ## Notifications and alert volume
 
 Completed file captures produce immediate metadata-only alerts after the file
@@ -83,6 +100,19 @@ into one notification per packet or connection.
 
 No notification contains raw malware, captured credentials, payload bodies, or
 private topology.
+
+## Private visualization
+
+Normalized event metadata is copied into a private search and visualization
+stack. One dashboard provides per-sensor filtering, capture hashes, event
+counts, and recent activity. A separate animated attack map displays paced,
+deduplicated source-to-sensor events while retaining raw event totals in the
+underlying index. Neither interface is published on a public management port.
+
+The display layer is deliberately not the evidence ledger. A plotted point or
+dashboard row means that a normalized event was indexed; capture, archive,
+reputation lookup, sandbox analysis, and public reporting remain separate
+states.
 
 ## Data path
 

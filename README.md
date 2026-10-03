@@ -14,8 +14,9 @@ for turning sensor logs into defensible summaries.
 
 ## Research snapshot
 
-The figures below are point-in-time snapshots from September 2026. They describe
-the reviewed datasets, not lifetime totals.
+The figures below combine reviewed September 2026 datasets with two accepted
+metadata-only censuses from October 2026. They are point-in-time snapshots, not
+lifetime totals.
 
 | Observation | Result |
 |---|---:|
@@ -25,6 +26,8 @@ the reviewed datasets, not lifetime totals.
 | Unique Cowrie transfer hashes reviewed | **17** |
 | Unique hashes across both streams | **135** |
 | CPU architectures in one Cowrie payload set | **5** |
+| Public source IPs in one 48-hour VPS census | **1,901** |
+| Public source IPs in one 72-hour T-Pot census | **2,671** |
 
 The most important lesson was not simply that exposed services receive traffic.
 It was how concentrated and repetitive that traffic can be: a handful of
@@ -57,6 +60,13 @@ with different cryptographic hashes.
 - **Web exploitation is highly automated:** probes targeted environment files,
   exposed Git metadata, PHPUnit paths, ThinkPHP invocation routes, PHP
   configuration abuse, and unauthenticated container APIs.
+- **The collection surface now includes specialized emulators:** a NetScaler
+  decoy, an Android Debug Bridge honeypot, and a Log4Shell-focused collector
+  extend coverage beyond the original SSH, Telnet, SMB, and generic web views.
+- **The first retained live-malware set from the dedicated T-Pot host was
+  already known:** hash-only reputation results associated selected files with
+  Medusa, Mirai, and Multiverze families. “First for this sensor” was kept
+  separate from “new to the security community.”
 
 [Read the case studies](docs/case-studies.md) ·
 [Browse selected SHA-256 indicators](docs/observed-hashes.md)
@@ -70,11 +80,13 @@ flowchart LR
     Net --> Cowrie[Cowrie<br/>SSH and Telnet]
     Net --> Dionaea[Dionaea<br/>SMB and service emulation]
     Net --> Web[H0neytr4p<br/>HTTP and HTTPS]
+    Net --> Specialized[NetScaler, ADB,<br/>and Log4Shell emulation]
     Net --> Aux[Auxiliary protocol emulators]
 
     Cowrie --> Logs[(Append-only logs)]
     Dionaea --> Logs
     Web --> Logs
+    Specialized --> Logs
     Aux --> Logs
     Logs --> Reports[Read-only reporting tools]
     Reports --> Review{Human review}

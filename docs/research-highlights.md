@@ -40,6 +40,32 @@ Across the published snapshots, the web sensors recorded 27,935 request events
 and 845 trap matches. All recorded payload events in those snapshots were
 controlled validation tests and were excluded from attacker findings.
 
+Specialized collectors now add narrow views of NetScaler exploitation,
+Android Debug Bridge exposure, and Log4Shell-style lookup payloads. The ADB and
+Log4Shell collectors can retrieve observed HTTP/S payload URLs only through a
+VPN-routed, fail-closed path. Retrieval targets in private, reserved, metadata,
+or non-VPN address space remain blocked, and captured content lands on bounded
+`noexec` storage.
+
+## First live-malware set from T-Pot
+
+The dedicated T-Pot host produced its first retained live-malware set after the
+capture disk and isolation controls were accepted. Hash-only reputation lookup
+associated the selected files with known Medusa downloader, Mirai, and
+Multiverze activity. This was new to this collection, not a claim of newly
+discovered malware. The public record therefore preserves family-level context
+without publishing raw files or treating every transfer as unique content.
+
+## Unified collection and visualization
+
+Metadata collection now runs as a single census per collection plane. Each
+census generates deterministic hashes and a sanitized analysis subset, which
+reduces inconsistent one-off queries while keeping raw evidence out of the
+handoff. Private dashboards provide an all-sensor view, capture hashes, and
+source activity; an animated map is paced and visually deduplicated so a burst
+from one source does not obscure unrelated events. Raw totals remain available
+for analysis.
+
 ## Operational lessons
 
 - Reusable reporting scripts prevent inconsistent one-off queries.
@@ -55,3 +81,6 @@ controlled validation tests and were excluded from attacker findings.
   passive intelligence and explicitly authorized targets.
 - Public findings are most useful when they explain methodology and limitations
   rather than presenting unsanitized telemetry dumps.
+- Dashboard convenience must not collapse evidence states: observed,
+  captured, archived, hash-looked-up, analyzed, and publicly reported are
+  tracked separately.
